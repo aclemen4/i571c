@@ -30,13 +30,13 @@
       (dept-employees dept (cdr employees)))
    ))
 
-;;(check-equal? (dept-employees 'ece EMPLOYEES) '((joan 23 ece 110000.00)))
-;;(check-equal? (dept-employees 'cs EMPLOYEES)
-;;   '((tom 33 cs 85000.00)
-;; 		(bill 29 cs 69500.00)
-;; 		(sue 19 cs 22000.00)
-;; 		))
-;; (check-equal? (dept-employees 'ce EMPLOYEES) '())
+(check-equal? (dept-employees 'ece EMPLOYEES) '((joan 23 ece 110000.00)))
+(check-equal? (dept-employees 'cs EMPLOYEES)
+   '((tom 33 cs 85000.00)
+ 		(bill 29 cs 69500.00)
+ 		(sue 19 cs 22000.00)
+ 		))
+ (check-equal? (dept-employees 'ce EMPLOYEES) '())
 
 ;; #2: 5-points
 ;;return list of names of employees belonging to department dept
@@ -50,9 +50,9 @@
       (dept-employees-names dept (cdr employees)))
    ))
 
-;; (check-equal? (dept-employees-names 'ece EMPLOYEES) '(joan))
-;; (check-equal? (dept-employees-names 'cs EMPLOYEES) '(tom bill sue))
-;; (check-equal? (dept-employees-names 'ce EMPLOYEES) '())
+ (check-equal? (dept-employees-names 'ece EMPLOYEES) '(joan))
+ (check-equal? (dept-employees-names 'cs EMPLOYEES) '(tom bill sue))
+ (check-equal? (dept-employees-names 'ce EMPLOYEES) '())
 
 ;; #3: 15-points
 ;;Given list indexes containing 0-based indexes and a list possibly
@@ -70,19 +70,19 @@
      )
   )
 
-;; (check-equal? (list-access '(1) '(a b c)) 'b)
-;; (check-equal? (list-access '(2) '(a b (c))) '(c))
-;; (check-equal? (list-access '(2 0) '(a b (c))) 'c)
-;; (check-equal? (list-access '(3) '(a b (c))) 'nil)
+(check-equal? (list-access '(1) '(a b c)) 'b)
+ (check-equal? (list-access '(2) '(a b (c))) '(c))
+ (check-equal? (list-access '(2 0) '(a b (c))) 'c)
+;;(check-equal? (list-access '(3) '(a b (c))) 'nil)
 ;; (check-equal? (list-access '(2 1) '(a b (c))) 'nil)
-;; (check-equal? (list-access '() '((1 2 3) (4 (5 6 (8)))) )
-;; 	      '((1 2 3) (4 (5 6 (8)))))
-;; (check-equal? (list-access '(1) '((1 2 3) (4 (5 6 (8)))) )
-;; 	      '(4 (5 6 (8))))
-;; (check-equal? (list-access '( 1 1 2) '((1 2 3) (4 (5 6 (8)))) )
-;; 	      '(8))
-;; (check-equal? (list-access '( 1 1 2 0) '((1 2 3) (4 (5 6 (8)))) )
-;; 	      '8)
+ (check-equal? (list-access '() '((1 2 3) (4 (5 6 (8)))) )
+ 	      '((1 2 3) (4 (5 6 (8)))))
+ (check-equal? (list-access '(1) '((1 2 3) (4 (5 6 (8)))) )
+ 	      '(4 (5 6 (8))))
+ (check-equal? (list-access '( 1 1 2) '((1 2 3) (4 (5 6 (8)))) )
+ 	      '(8))
+ (check-equal? (list-access '( 1 1 2 0) '((1 2 3) (4 (5 6 (8)))) )
+ 	      '8)
 ;; (check-equal? (list-access '(0 1) '((1))) 'nil)
 
 ;; #4: 15-points
@@ -97,8 +97,8 @@
 	      (aux-empsum (+ acc (list-ref(car n)3)) (cdr n))))])
     (aux-empsum 0 employees)))
 
-;; (check-equal? (employees-salary-sum EMPLOYEES) 344700.00)
-;; (check-equal? (employees-salary-sum '()) 0)
+(check-equal? (employees-salary-sum EMPLOYEES) 344700.00)
+(check-equal? (employees-salary-sum '()) 0)
 
 ;; #5: 15-points
 ;;return list of pairs giving name and salary of employees belonging to
@@ -112,25 +112,27 @@
            (equal? (caddr filter-list) dept))
            employees)))
 
-;; (check-equal? (dept-employees-names-salaries 'ece EMPLOYEES) '((joan 110000.00)))
-;; (check-equal? (dept-employees-names-salaries 'cs EMPLOYEES)
-;; 	      '((tom 85000.00)
-;; 		(bill 69500.00)
-;; 		(sue 22000.00)
-;; 		))
-;; (check-equal? (dept-employees 'ce EMPLOYEES) '())
+(check-equal? (dept-employees-names-salaries 'ece EMPLOYEES) '((joan 110000.00)))
+(check-equal? (dept-employees-names-salaries 'cs EMPLOYEES)
+ 	      '((tom 85000.00)
+ 		(bill 69500.00)
+ 		(sue 22000.00)
+ 		))
+(check-equal? (dept-employees 'ce EMPLOYEES) '())
 
 ;; #6: 15-points
 ;;return average salary of all employees; 0 if employees empty
 ;;cannot use recursion
 ;;Hint: use foldl
 (define (employees-average-salary employees)
-  /
-(foldl + 0 (map cadddr employees)) (length employees))
- 
+    (if(null? employees)
+        0
+        (/ (foldl + 0 (map cadddr employees)) (length employees))
+    ))
 
-;; (check-equal? (employees-average-salary EMPLOYEES) (/ 344700.00 5))
-;; (check-equal? (employees-average-salary '()) 0)
+(check-equal? (employees-average-salary EMPLOYEES) (/ 344700.00 5))
+
+(check-equal? (employees-average-salary '()) 0)
 
 ;; #7: 20-points
 ;; given an integer or list of nested lists containing integers,
@@ -140,15 +142,17 @@
 ;;        use (string-append str1 str2 ...) to append str1 str2 ...
 ;;        use (string-join str-list sep) to join strings in str-list using sep
 ;; also see toJson() methods in java-no-deps Parser.java in prj1-sol
+
 (define (int-list-json int-list)
-  (if number? int-list
-     (number->string(car int-list))
-     ()
-      ))
+    (if(null? int-list)
+        "[]"
+        (number->string int-list)
+    )
+)
 
       
-(check-equal? (int-list-json '(1 2 3)) "[1,2,3]")
+;;(check-equal? (int-list-json '(1 2 3)) "[1,2,3]")
 ;; (check-equal? (int-list-json '(1 (2 (4 5) 6))) "[1,[2,[4,5],6]]")
-;; (check-equal? (int-list-json '()) "[]")
-;; (check-equal? (int-list-json 42) "42")
+(check-equal? (int-list-json '()) "[]")
+(check-equal? (int-list-json 42) "42")
 	 
