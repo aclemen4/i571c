@@ -225,13 +225,7 @@ testFoldTree = do
 -- an in-order traversal of the tree. 
 -- Restriction: May NOT use recursion.  MUST be implemented using foldTree.
 flattenTree :: Tree a -> [a]
- flattenTree _ = foldTree treeFn leafFn tree 
- flattenTree = foldTree (\xs x ys -> xs ++ x : ys) (\x -> [x])
-
-
-
-
--- flattenTree x xs ys = foldTree (\xs x ys -> xs ++ x : ys) (\x -> [x])
+flattenTree tree = foldTree (\xs x ys -> xs ++ x : ys) (\x -> [x]) tree
  
  
 
@@ -262,7 +256,7 @@ testFlattenTree = do
 -- of all lists in tree.
 -- Restriction: May NOT use recursion. MUST be implemented using flattenTree.
 catenateTreeLists :: Tree [a] -> [a]
-catenateTreeLists _ = error "TODO"
+catenateTreeLists tree = foldl (++) [] (flattenTree tree)
 
 testCatenateTreeLists = do
   assertEq "catenateTreeLists Tree [Int]"
