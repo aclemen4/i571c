@@ -154,7 +154,7 @@ dept_employees1_test_() ->
 % dept_employees2(Dept, Employees): return sub-list of Employees
 % having dept = Dept.
 % Restriction: must be implemented using a single call to lists:filter().
-dept_employees2(Dept, Employees) -> lists:filter(fun (X) -> X#employee.dept == Dept end, Employees).
+dept_employees2(Dept, Employees) -> lists:filter(fun (N) -> N#employee.dept == Dept end, Employees).
 
 -ifdef(test_dept_employees2).
 dept_employees2_test_() ->
@@ -304,20 +304,21 @@ find_employees_test_() ->
 %   _:                    return an error-result with a suitable ErrString.
 % Hint: use io_lib:format(Format, Args) to build suitable error strings,
 % for example: lists:flatten(io_lib:format("bad Req ~p", [Req]))
-employees_req(Req, Employees) -> case Req of
+employees_req(Req, Employees) ->  case Req of
                                     { delete, Name } ->
-                                      {ok,void,delete_employee(Employee, Employees)};
+                                      {ok, void, delete_employee(Name, Employees)};
                                     { dump } ->
-                                      {ok,Employees,Employees};
+                                            {ok, Employees, Employees};
                                     { find, Preds } ->
-                                      { ok, find_employees(Preds, Employees),Employees };
-                                    { read, Name } -> case find
-                                      { ok,  }
+                                            { ok, find_employees(Preds, Employees), Employees };
+                                    { read, Name } -> case find_employees([employee_has_name(Name)], Employees) of
+                                                            [] -> {err, lists:flatten(io_lib:format("Person ~w not found", [Name])), Employees};
+                                                            Other -> {ok, find_employees([employee_has_name(Name)], Employees), Employees} end;
                                     { upsert, Employee } ->
-                                      {ok,void,upsert_employee(Employee, Employees)};
+                                           {ok,void,upsert_employee(Employee, Employees)};
                                     Other ->
-                                      {}
-                                end
+                                           {err, lists:flatten(io_lib:format("bad req ~p", [Req])), Employees}
+                                  end.
 
 
 %% map upsert_employee_test_specs into args-result pairs suitable
@@ -372,7 +373,12 @@ employees_req_test_() ->
 % { sort } which should return { ok, void, SortedEmployees }
 % where SortedEmployees is Employees sorted in ascending order by name.
 % Hint: use lists:sort/2 to sort, delegate all non-sort Fns to employees_req/2.
-employees_req_with_sort(Req, Employees) -> 'TODO'.
+employees_req_with_sort(Req, Employees) -> case Req of
+                {sort} ->
+                  {ok,void,lists:sort(fun(X,Y)-> X#employee.name<Y#employee.name end, Employees)};
+                Other ->
+                  {employees_req(Req, Employees)}
+              end.
 
 employees_req_with_sort_test_specs() ->
     [ { sort, [{sort}, ?Employees], { ok, void, ?SortedEmployees } } ] ++
